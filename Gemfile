@@ -1,4 +1,4 @@
-source 'http://torquebox.org/2x/builds/492/gem-repo/'
+source 'http://torquebox.org/2x/builds/LATEST/gem-repo/'
 source :rubygems
 
 gem 'bundler'
@@ -15,8 +15,8 @@ end
 
 # TorqueBox
 group :torquebox do
-  gem 'torquebox-cache', '=2.x.incremental.492'
-  gem 'torquebox-rake-support', '=2.x.incremental.492'
+  gem 'torquebox-cache', '~> 2.x.incremental.492'
+  gem 'torquebox-rake-support', '~> 2.x.incremental.492'
 end
 
 # Presentation
