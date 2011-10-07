@@ -33,10 +33,15 @@ module BeerCatalogue
     end
 
     post '/beer' do
-      if params[:method] == 'put'
+      if params[:method] == '__put'
         params.delete 'method'
         beer = Beer.first(:user_id => current_user.id, :id => params[:id])
         beer.update( params ) if beer
+      elsif params[:method] == '__delete'
+        beer = Beer.find(params[:id])
+        "Can't find a beer with that id. Sorry." and return unless beer
+        beer.first.destroy
+        true
       else
         Beer.create(:name=>params[:name], :notes=>params[:notes], :rating=>params[:rating], :user=>current_user)
       end
