@@ -33,7 +33,13 @@ module BeerCatalogue
     end
 
     post '/beer' do
-      Beer.create(:name=>params[:name], :notes=>params[:notes], :rating=>params[:rating], :user=>current_user)
+      if params[:method] == 'put'
+        params.delete 'method'
+        beer = Beer.first(:user_id => current_user.id, :id => params[:id])
+        beer.update( params ) if beer
+      else
+        Beer.create(:name=>params[:name], :notes=>params[:notes], :rating=>params[:rating], :user=>current_user)
+      end
       redirect '/'
     end
 

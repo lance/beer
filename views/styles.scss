@@ -20,9 +20,33 @@
     float: left;
     width: 45%;
   }
+
+  #beer-list ul {
+    list-style: none;
+    li {
+      margin: 10px 0;
+      padding: 10px 0;
+      border-bottom: #ddd 1px dotted;
+      h3 {
+        margin: 10px 0 0;
+      }
+      .rating {
+        display: inline-block;
+        color: #666;
+      }
+      .notes {
+        font-family: Courier, fixed-width;
+        display: block;
+        width: 400px;
+        margin: 5px 0 10px;
+      }
+    }
+  }
+
   #beer-form {
     padding-left: 40px;
     border-left: #999 1px dashed;
   }
 }
     
+

@@ -12,15 +12,46 @@
     - else
       %ul
         - @beers.each do |beer|
-          %li
-            =beer.name
-            =beer.rating
-            %p
-              =beer.notes
+          %li{:id=>beer.id}
+            %h3.name=beer.name
+            %span.display
+              %span.rating="Rating: #{ beer.rating }"
+              %span.notes=beer.notes
+              %a.toggle{:href=>'#'} Edit
+              \|
+              %a.delete{:href=>'#'} Delete
+
+            %span.editor{:style=>'display:none'}
+              %form{:action=>'/beer', :method=>'POST', :style=>'display:inline'}
+                %p
+                  %input{:type=>:hidden, :name=>'method', :value=>'put'}
+                  %input{:type=>:hidden, :name=>'id', :value=>beer.id}
+                  %label{:for=>'name'} 
+                    Name:
+                    %input{:type=>'text', :name=>'name', :value=>beer.name}
+                  %label{:for=>'rating'} 
+                    Rating:
+                    %select{:name=>'rating'} 
+                      %option{:value=>1} 1
+                      %option{:value=>2} 2
+                      %option{:value=>3, :selected=>:selected} 3
+                      %option{:value=>4} 4
+                      %option{:value=>5} 5
+                %p
+                  %label{:for=>'notes'} Notes
+                  %br
+                  %textarea{:name=>'notes', :rows=>8, :cols=>40} 
+                    =beer.notes
+
+                %br
+                %input{:type=>'submit'}
+              %a.toggle{:href=>'#'} Cancel
+
 
             
 
   #beer-form
+    %h2 Add a Beer
     %form{:method=>'POST', :action=>'/beer'}
       %p
         %label{:for=>'name'} Name
