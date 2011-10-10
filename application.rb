@@ -11,7 +11,7 @@ module BeerCatalogue
 
   class Application < Sinatra::Base
 
-    enable :sessions, :logging, :static
+    enable :sessions, :logging, :static, :method_override
     
     include BeerCatalogue::Authentication
 
@@ -32,19 +32,21 @@ module BeerCatalogue
       haml :index
     end
 
+    put '/beer/:id' do
+      do_update
+      redirect '/'
+    end
+
+    delete '/beer/:id' do
+      do_delete
+      content_type :json
+      "{\"id\": #{params[:id]}}"
+    end
+
     post '/beer' do
-      if params[:method] == '__put'
-        params.delete 'method'
-        beer = Beer.first(:user_id => current_user.id, :id => params[:id])
-        beer.update( params ) if beer
-      elsif params[:method] == '__delete'
-        beer = Beer.find(params[:id])
-        "Can't find a beer with that id. Sorry." and return unless beer
-        beer.first.destroy
-        true
-      else
-        Beer.create(:name=>params[:name], :notes=>params[:notes], :rating=>params[:rating], :user=>current_user)
-      end
+      attrs = params[:beer] || {}
+      attrs[:user_id] = current_user.id
+      beer = Beer.create( attrs )
       redirect '/'
     end
 
@@ -65,6 +67,18 @@ module BeerCatalogue
       scss :styles
     end
     
+    private
+    def do_update
+      beer = Beer.first(:user_id => current_user.id, :id => params[:id])
+      beer.update( params[:beer] ) if beer
+      beer.save
+    end
+
+    def do_delete
+      beer = Beer.get(params[:id])
+      puts "Can't find a beer with that id. Sorry." and return unless beer
+      beer.destroy
+    end
 
   end
 end

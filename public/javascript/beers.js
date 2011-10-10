@@ -9,14 +9,12 @@ $(document).ready(function() {
   // Delete a beer
   $('.delete').click( function() {
     if ( confirm('Are you sure?') ) {
-      data = { 'method': '__delete', 'id': $(this).closest('li').attr('id')  }
-      $.post('/beer', data, 
+      $.post('/beer/' + $(this).closest('li').attr('id'), { '_method': 'delete' },
         function(data) {
-          $(this).closest('li').remove()
-        },
-        function(data) {
-          alert('There was a problem: ' + data)
-        })
+          alert(data)
+          alert(data.id)
+          $("#"+data.id).remove()
+        }, 'json')
     }
     return false;
   } )
